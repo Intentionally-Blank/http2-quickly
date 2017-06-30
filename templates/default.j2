@@ -1,27 +1,4 @@
-#
-# This is an example VCL file for Varnish.
-#
-# It does not do anything by default, delegating control to the
-# builtin VCL. The builtin VCL is called when there is no explicit
-# return statement.
-#
-# See the VCL chapters in the Users Guide at https://www.varnish-cache.org/docs/
-# and https://www.varnish-cache.org/trac/wiki/VCLExamples for more examples.
-
-# Marker to tell the VCL compiler that this VCL has been adapted to the
-# new 4.0 format.
 vcl 4.0;
-
-# Default backend definition. Set this to point to your content server.
-backend jekyll {
-  .host = "127.0.0.1";
-  .port = "4000";
-}
-
-backend dashboard {
-  .host = "127.0.0.1";
-  .port = "3000";
-}
 
 backend acmetool {
    .host = "127.0.0.1";
@@ -33,33 +10,10 @@ sub vcl_recv {
     set req.backend_hint = acmetool;
     return(pass);
   }
-
-  if (req.http.host ~ "^busy.intentionally-blank") {
-    set req.backend_hint = dashboard;
-    return(pass);
-  } else {
-    set req.backend_hint = jekyll;
-  }
-
-  return(hash);
 }
 
 sub vcl_backend_response {
-
-  set beresp.http.Cache-Control = "max-age=3600, public";
-
-  set beresp.ttl = 31449600s;
-  set beresp.grace = 31449600s;
-
-  if (beresp.status == 500 || beresp.status == 503 || beresp.status == 404) {
-    set beresp.ttl = 1s;
-    set beresp.grace = 5s;
-    return(deliver);
-  }
-
-  return(deliver);
 }
 
 sub vcl_deliver {
-
 }

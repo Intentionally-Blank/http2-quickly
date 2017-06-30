@@ -3,11 +3,35 @@
   apt_repository:
     repo: 'ppa:hlandau/rhea'
 
+- name: varnish repository
+  shell: curl -s https://packagecloud.io/install/repositories/varnishcache/varnish5/script.deb.sh | bash
+
 - name: install proxy packages
   apt: name={{item}} state=latest update_cache=true
   with_items:
+    - varnish
     - hitch
     - acmetool
+
+- name: upload varnish configuration
+  template:
+    src: default.j2
+    dest: /etc/varnish/http2_quickly.vcl
+    mode: 0644
+
+- name: reconfigure varnish systemd
+  template:
+    src: varnish-service.j2
+    dest: /etc/systemd/system/varnish.service
+    mode: 0755
+
+- name: make sure reconfigure takes
+  command: systemctl daemon-reload
+
+- name: restart varnish
+  service:
+    name: varnish
+    state: restarted
 
 - name: upload hitch configuration
   template:
