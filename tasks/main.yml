@@ -1,0 +1,41 @@
+---
+- name: acmetool repository
+  apt_repository:
+    repo: 'ppa:hlandau/rhea'
+
+- name: install proxy packages
+  apt: name={{item}} state=latest update_cache=true
+  with_items:
+    - hitch
+    - acmetool
+
+- name: upload hitch configuration
+  template:
+    src: hitch.j2
+    dest: /etc/hitch/hitch.conf
+    mode: 0644
+
+- name: mk acme conf dir
+  file:
+    path: /var/lib/acme/conf
+    state: directory
+
+- name: configure acmetool
+  template:
+    src: response-file.j2
+    dest: /var/lib/acme/conf/responses
+    mode: 0644
+
+- name: issue certs
+  shell: acmetool --batch want {{ http2_quickly_hostname }}
+
+- name: create busy pem file
+  shell: cd /var/lib/acme/live/{{ http2_quickly_hostname }} && cat cert fullchain privkey > haproxy
+
+- name: create www pem file
+  shell: cd /var/lib/acme/live/{{ http2_quickly_hostname }} && cat cert fullchain privkey > haproxy
+
+- name: restart hitch
+  service:
+    name: hitch
+    state: restarted
