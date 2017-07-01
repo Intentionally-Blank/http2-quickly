@@ -8,7 +8,9 @@ backend        = "[::1]:80"
 write-proxy-v2 = on
 
 # List of PEM files, each with key, certificates and dhparams
-pem-file = "/var/lib/acme/live/{{ http2_quickly_hostname }}/haproxy"
+{% for hostname in http2_quickly_hostnames %}
+pem-file = "/var/lib/acme/live/{{ hostname }}/haproxy"
+{% endfor %}
 
 # Set uid/gid after binding a socket
 # Uncomment these on CentOS/RHEL

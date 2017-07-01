@@ -51,13 +51,11 @@
     mode: 0644
 
 - name: issue certs
-  shell: acmetool --batch want {{ http2_quickly_hostname }}
+  shell: acmetool --batch want {{ http2_quickly_hostnames|join(' ') }}
 
-- name: create busy pem file
-  shell: cd /var/lib/acme/live/{{ http2_quickly_hostname }} && cat cert fullchain privkey > haproxy
-
-- name: create www pem file
-  shell: cd /var/lib/acme/live/{{ http2_quickly_hostname }} && cat cert fullchain privkey > haproxy
+- name: create pem file
+  shell: cd /var/lib/acme/live/{{ item }} && cat cert fullchain privkey > haproxy
+  with_items: "{{ http2_quickly_hostnames }}"
 
 - name: restart hitch
   service:
