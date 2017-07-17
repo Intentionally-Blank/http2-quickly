@@ -6,7 +6,7 @@
 # You will typically want to use --response-file with --stdio or --batch.
 # For dialogs not requiring a response, but merely acknowledgement, specify true.
 # This file is YAML. Note that JSON is a subset of YAML.
-"acme-enter-email": "rjspotter@intentionally-blank.com"
+"acme-enter-email": "{{ acme_email }}"
 "acme-agreement:https://letsencrypt.org/documents/LE-SA-v1.1.1-August-1-2016.pdf": true
 "acmetool-quickstart-choose-server": {{ acme_server }}
 "acmetool-quickstart-choose-method": proxy

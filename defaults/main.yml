@@ -1,3 +1,4 @@
 ---
 http2_quickly_hostname: example.com
 acme_server: "https://acme-staging.api.letsencrypt.org/directory"
+acme_email: me@example.com
