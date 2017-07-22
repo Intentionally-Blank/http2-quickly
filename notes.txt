@@ -1,0 +1,5 @@
+References
+
+https://info.varnish-software.com/blog/five-steps-to-secure-varnish-with-hitch-and-lets-encrypt
+
+https://fnord.no/2015/11/12/letsencrypt/
