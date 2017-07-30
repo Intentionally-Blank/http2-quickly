@@ -19,12 +19,11 @@
     dest: /etc/varnish/http2_quickly.vcl
     mode: 0644
 
-- name: upload varnish configuration if none for acmetool exists
+- name: upload varnish configuration
   template:
     src: minimal.j2
     dest: /etc/varnish/default.vcl
     mode: 0644
-    force: false
 
 - name: reconfigure varnish systemd
   template:
