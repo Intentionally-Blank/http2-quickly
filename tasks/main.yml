@@ -3,8 +3,8 @@
   apt_repository:
     repo: 'ppa:hlandau/rhea'
 
-- name: varnish repository
-  shell: curl -s https://packagecloud.io/install/repositories/varnishcache/varnish5/script.deb.sh | bash
+#- name: varnish repository
+#  shell: curl -s https://packagecloud.io/install/repositories/varnishcache/varnish5/script.deb.sh | bash
 
 - name: install proxy packages
   apt: name={{item}} state=latest update_cache=true
@@ -62,6 +62,13 @@
 - name: create pem file
   shell: cd /var/lib/acme/live/{{ item }} && cat cert fullchain privkey > haproxy
   with_items: "{{ http2_quickly_hostnames }}"
+
+- name: set permissions
+  file:
+    path: /var/lib/acme/live/{{ item }}/haproxy
+    mode: 0700
+  with_items: "{{ http2_quickly_hostnames }}"
+
 
 - name: restart hitch
   service:
