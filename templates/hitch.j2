@@ -5,14 +5,9 @@ frontend = "[*]:443"
 ciphers  = "EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH"
 
 backend        = "[::1]:80"
-write-proxy-v2 = on
+write-proxy-v2 = off
 
 # List of PEM files, each with key, certificates and dhparams
 {% for hostname in http2_quickly_hostnames %}
 pem-file = "/var/lib/acme/live/{{ hostname }}/haproxy"
 {% endfor %}
-
-# Set uid/gid after binding a socket
-# Uncomment these on CentOS/RHEL
-#user = "hitch"
-#group = "hitch"

@@ -3,9 +3,6 @@
   apt_repository:
     repo: 'ppa:hlandau/rhea'
 
-#- name: varnish repository
-#  shell: curl -s https://packagecloud.io/install/repositories/varnishcache/varnish5/script.deb.sh | bash
-
 - name: install proxy packages
   apt: name={{item}} state=latest update_cache=true
   with_items:
@@ -44,6 +41,13 @@
     src: hitch.j2
     dest: /etc/hitch/hitch.conf
     mode: 0644
+
+- name: mk hitch run directory
+  file:
+    path: /var/lib/hitch
+    state: directory
+    mode: 0755
+    owner: "_hitch"
 
 - name: mk acme conf dir
   file:
